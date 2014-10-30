@@ -4,5 +4,11 @@
     <string name="app_name">Memoir</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="action_plus_add">Add</string>
+    <string name="add_restaurent">Restaurent</string>
+    <string name="add_place">Place</string>
+    <string name="add_trip">Trip</string>
+    <string name="add_hotel">Hotel</string>
+    <string name="add_flight">Flight</string>
 
 </resources>

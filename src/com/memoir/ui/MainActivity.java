@@ -1,7 +1,10 @@
-package com.memoir;
+package com.memoir.ui;
+
+import com.memoir.R;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,13 +17,15 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		ActionBar actionBar = getActionBar();
 		actionBar.show();
-		
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+
 		return true;
 	}
 
@@ -32,6 +37,10 @@ public class MainActivity extends Activity {
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
+		}
+		if (id == R.id.action_plus_add) {
+			Intent intent = new Intent(MainActivity.this, AddNewEntry.class);
+			startActivity(intent);
 		}
 		return super.onOptionsItemSelected(item);
 	}
