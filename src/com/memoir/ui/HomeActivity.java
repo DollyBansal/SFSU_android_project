@@ -1,6 +1,7 @@
 package com.memoir.ui;
 
 import com.memoir.R;
+import com.memoir.adapter.RestaurentCursorAdapter;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -8,8 +9,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 
-public class MainActivity extends Activity {
+public class HomeActivity extends Activity {
+
+	RestaurentCursorAdapter cursorAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +23,9 @@ public class MainActivity extends Activity {
 		ActionBar actionBar = getActionBar();
 		actionBar.show();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+		ListView listView = (ListView) findViewById(R.id.listview);
+		listView.setAdapter(cursorAdapter);
 
 	}
 
@@ -31,15 +39,13 @@ public class MainActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
+
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
 			return true;
 		}
 		if (id == R.id.action_plus_add) {
-			Intent intent = new Intent(MainActivity.this, AddNewEntry.class);
+			Intent intent = new Intent(HomeActivity.this, AddNewEntry.class);
 			startActivity(intent);
 		}
 		return super.onOptionsItemSelected(item);

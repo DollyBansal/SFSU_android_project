@@ -8,6 +8,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
+import com.memoir.model.Hotel.Hotels;
+import com.memoir.model.Place.Places;
+import com.memoir.model.Restaurent.Restaurents;
+import com.memoir.model.Trip.Trips;
+
 public class MemoirContentProvider extends ContentProvider {
 	private static final int TRIP = 100;
 	private static final int PLACE = 101;
@@ -43,7 +48,13 @@ public class MemoirContentProvider extends ContentProvider {
 		final int match = uriMatcher.match(uri);
 		switch (match) {
 		case TRIP:
-
+			return Trips.CONTENT_TYPE;
+		case PLACE:
+			return Places.CONTENT_TYPE;
+		case RESTAURENT:
+			return Restaurents.CONTENT_TYPE;
+		case HOTEL:
+			return Hotels.CONTENT_TYPE;
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
@@ -69,7 +80,28 @@ public class MemoirContentProvider extends ContentProvider {
 		final int match = uriMatcher.match(uri);
 
 		switch (match) {
-
+		case TRIP:
+			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.TRIP,
+					null, values);
+			getContext().getContentResolver().notifyChange(uri, null, false);
+			return Trips.buildTripUri(values.getAsString(Trips.Name));
+		case RESTAURENT:
+			db.insertOrThrow(
+					com.memoir.provider.DatabaseHelper.Tables.RESTAURENT, null,
+					values);
+			getContext().getContentResolver().notifyChange(uri, null, false);
+			return Restaurents.buildRestaurentUri(values
+					.getAsString(Restaurents.Name));
+		case HOTEL:
+			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.HOTEL,
+					null, values);
+			getContext().getContentResolver().notifyChange(uri, null, false);
+			return Hotels.buildHotelUri(values.getAsString(Hotels.Name));
+		case PLACE:
+			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.PLACE,
+					null, values);
+			getContext().getContentResolver().notifyChange(uri, null, false);
+			return Places.buildPlaceUri(values.getAsString(Places.Name));
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}

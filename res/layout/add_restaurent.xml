@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Name"
+        android:textColor="#ff00ff"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/rest_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name" />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rest_name"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Date"
+        android:textColor="#ff00ff"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/rest_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/date"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:text="11:00am, 21st Sep"
+        android:textColor="#ff00ff"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/rest_date"
+        android:text="Address"
+        android:textColor="#ff00ff"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/rest_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/address"
+        android:inputType="textMultiLine" />
+    
+    <TextView
+        android:id="@+id/likeOrNot"
+        android:layout_below="@+id/rest_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Do you like it?"
+        android:textColor="#ff00ff"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/rest_likeOrNot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/likeOrNot"
+        android:inputType="textMultiLine" />
+    
+    <TextView
+        android:id="@+id/comment"
+        android:layout_below="@+id/rest_likeOrNot"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="10dp"
+        android:text="Comment"
+        android:textColor="#ff00ff"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/rest_comment"
+        android:layout_below="@+id/comment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textMultiLine" />
+    
+    <Button
+        android:id="@+id/rest_save"
+        android:layout_below="@+id/rest_comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save" />
+  <Button
+        android:id="@+id/rest_saveToTrip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rest_comment"
+        android:layout_toRightOf="@+id/rest_save"
+        android:text="Save To Trip" />
+    
+
+</RelativeLayout>

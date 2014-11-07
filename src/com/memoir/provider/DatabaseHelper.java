@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
+import com.memoir.model.Hotel.Hotels;
+import com.memoir.model.Place.Places;
+import com.memoir.model.Restaurent.Restaurents;
 import com.memoir.model.Trip.Trips;
 
 public class DatabaseHelper extends SQLiteOpenHelper {
@@ -45,6 +48,83 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			db.execSQL("DROP TABLE IF EXISTS " + Tables.TRIP);
+
+		}
+
+	}, new DatabaseMigration() {
+		@Override
+		public void apply(SQLiteDatabase db) {
+			String createPlaceTable = DatabaseBuilder.createTable(Tables.PLACE)
+					.withPrimaryKey(Places._ID).withIntegerColumns(Places.ID)
+					.withTextColumns(Places.Name)
+					.withTextColumns(Places.Adress)
+					.withTextColumns(Places.LikeOrNot)
+					.withTextColumns(Places.Comment)
+					.withIntegerColumns(Places.Date).buildSQL();
+
+			db.execSQL(createPlaceTable);
+		}
+
+		@Override
+		public void revert(SQLiteDatabase db) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.PLACE);
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.PLACE);
+
+		}
+
+	}, new DatabaseMigration() {
+		@Override
+		public void apply(SQLiteDatabase db) {
+			String createRestaurentTable = DatabaseBuilder
+					.createTable(Tables.RESTAURENT)
+					.withPrimaryKey(Restaurents._ID)
+					.withIntegerColumns(Restaurents.ID)
+					.withTextColumns(Restaurents.Name)
+					.withTextColumns(Restaurents.Adress)
+					.withTextColumns(Restaurents.LikeOrNot)
+					.withTextColumns(Restaurents.Comment)
+					.withIntegerColumns(Restaurents.Date).buildSQL();
+
+			db.execSQL(createRestaurentTable);
+		}
+
+		@Override
+		public void revert(SQLiteDatabase db) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.RESTAURENT);
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.RESTAURENT);
+
+		}
+
+	}, new DatabaseMigration() {
+		@Override
+		public void apply(SQLiteDatabase db) {
+			String createHotelTable = DatabaseBuilder.createTable(Tables.HOTEL)
+					.withPrimaryKey(Hotels._ID).withIntegerColumns(Hotels.ID)
+					.withTextColumns(Hotels.Name)
+					.withTextColumns(Hotels.Adress)
+					.withTextColumns(Hotels.LikeOrNot)
+					.withTextColumns(Hotels.Comment)
+					.withIntegerColumns(Hotels.Date).buildSQL();
+
+			db.execSQL(createHotelTable);
+		}
+
+		@Override
+		public void revert(SQLiteDatabase db) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.HOTEL);
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.HOTEL);
 
 		}
 	}
