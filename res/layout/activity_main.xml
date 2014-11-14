@@ -11,9 +11,10 @@
         android:background="#000000" />
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/listview_home"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/fragment_container" />
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/fragment_container"
+        android:background="#585858" />
 
 </RelativeLayout>

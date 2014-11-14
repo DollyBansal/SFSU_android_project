@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
+import com.memoir.model.Flight.Flights;
 import com.memoir.model.Hotel.Hotels;
 import com.memoir.model.Place.Places;
 import com.memoir.model.Restaurent.Restaurents;
@@ -55,6 +56,8 @@ public class MemoirContentProvider extends ContentProvider {
 			return Restaurents.CONTENT_TYPE;
 		case HOTEL:
 			return Hotels.CONTENT_TYPE;
+		case FLIGHT:
+			return Flights.CONTENT_TYPE;
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
@@ -102,6 +105,11 @@ public class MemoirContentProvider extends ContentProvider {
 					null, values);
 			getContext().getContentResolver().notifyChange(uri, null, false);
 			return Places.buildPlaceUri(values.getAsString(Places.Name));
+		case FLIGHT:
+			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.FLIGHT,
+					null, values);
+			getContext().getContentResolver().notifyChange(uri, null, false);
+			return Flights.buildFlightUri(values.getAsString(Flights.Name));
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
@@ -110,7 +118,6 @@ public class MemoirContentProvider extends ContentProvider {
 	@Override
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		if (uri == DatabaseHelper.BASE_CONTENT_URI) {
-			// Handle whole database deletes (e.g. when signing out)
 			deleteDatabase();
 			getContext().getContentResolver().notifyChange(uri, null, false);
 			return 1;
@@ -134,6 +141,21 @@ public class MemoirContentProvider extends ContentProvider {
 		final SelectionBuilder builder = new SelectionBuilder();
 		final int match = uriMatcher.match(uri);
 		switch (match) {
+		case RESTAURENT:
+			return builder
+					.table(com.memoir.provider.DatabaseHelper.Tables.RESTAURENT);
+		case FLIGHT:
+			return builder
+					.table(com.memoir.provider.DatabaseHelper.Tables.FLIGHT);
+		case PLACE:
+			return builder
+					.table(com.memoir.provider.DatabaseHelper.Tables.PLACE);
+		case HOTEL:
+			return builder
+					.table(com.memoir.provider.DatabaseHelper.Tables.HOTEL);
+		case TRIP:
+			return builder
+					.table(com.memoir.provider.DatabaseHelper.Tables.TRIP);
 
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -141,7 +163,6 @@ public class MemoirContentProvider extends ContentProvider {
 	}
 
 	private void deleteDatabase() {
-		// TODO: wait for content provider operations to finish, then tear down
 		databaseHelper.close();
 		Context context = getContext();
 		DatabaseHelper.deleteDatabase(context);

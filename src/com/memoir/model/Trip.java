@@ -11,9 +11,9 @@ import com.memoir.provider.DatabaseHelper.Tables;
 public class Trip {
 
 	public int id;
-	public Date trip_date;
 	public String trip_name;
-	public String trip_adress;
+	public Date trip_start;
+	public Date trip_end;
 	public String trip_likeOrNot;
 	public String trip_comments;
 	public String image_name;
@@ -22,9 +22,9 @@ public class Trip {
 	interface TripColumns {
 
 		String ID = "id";
-		String Date = "trip_date";
 		String Name = "trip_name";
-		String Adress = "trip_adress";
+		String Start_Date = "trip_date";
+		String End_Date = "trip_start";
 		String LikeOrNot = "trip_like";
 		String Comment = "trip_comment";
 		String Image_type = "image_type";

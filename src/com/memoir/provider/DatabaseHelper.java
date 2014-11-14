@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 
+import com.memoir.model.Flight.Flights;
 import com.memoir.model.Hotel.Hotels;
 import com.memoir.model.Place.Places;
 import com.memoir.model.Restaurent.Restaurents;
@@ -32,10 +33,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		public void apply(SQLiteDatabase db) {
 			String createTripTable = DatabaseBuilder.createTable(Tables.TRIP)
 					.withPrimaryKey(Trips._ID).withIntegerColumns(Trips.ID)
-					.withTextColumns(Trips.Name).withTextColumns(Trips.Adress)
+					.withTextColumns(Trips.Name)
 					.withTextColumns(Trips.LikeOrNot)
 					.withTextColumns(Trips.Comment)
-					.withIntegerColumns(Trips.Date).buildSQL();
+					.withIntegerColumns(Trips.Start_Date)
+					.withIntegerColumns(Trips.End_Date).buildSQL();
 
 			db.execSQL(createTripTable);
 		}
@@ -127,9 +129,35 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			db.execSQL("DROP TABLE IF EXISTS " + Tables.HOTEL);
 
 		}
-	}
 
-	};
+	}, new DatabaseMigration() {
+		@Override
+		public void apply(SQLiteDatabase db) {
+			String createFlightTable = DatabaseBuilder
+					.createTable(Tables.FLIGHT).withPrimaryKey(Flights._ID)
+					.withIntegerColumns(Flights.ID)
+					.withTextColumns(Flights.Name)
+					.withTextColumns(Flights.Flight_From)
+					.withTextColumns(Flights.Flight_To)
+					.withTextColumns(Flights.LikeOrNot)
+					.withTextColumns(Flights.Comment)
+					.withIntegerColumns(Flights.Date).buildSQL();
+
+			db.execSQL(createFlightTable);
+		}
+
+		@Override
+		public void revert(SQLiteDatabase db) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.FLIGHT);
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.FLIGHT);
+
+		}
+
+	} };
 
 	private static final String DATABASE_NAME = "memoir.db";
 
