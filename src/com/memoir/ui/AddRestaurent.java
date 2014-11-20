@@ -15,20 +15,24 @@ import android.content.OperationApplicationException;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.memoir.R;
-import com.memoir.model.Restaurent.Restaurents;
+import com.memoir.model.Memoir.Memoirs;
 import com.memoir.provider.DatabaseHelper;
 
 public class AddRestaurent extends Activity {
 	Button save, saveToTrip, edit_date;
-	EditText name, address, comment, like;
+	EditText name, address, comment;
 	TextView date;
 	String s_name, s_date, s_address, s_comment, s_like;
 	private Context context = this;
@@ -45,8 +49,30 @@ public class AddRestaurent extends Activity {
 		name = (EditText) findViewById(R.id.rest_name);
 		date = (TextView) findViewById(R.id.rest_date);
 		address = (EditText) findViewById(R.id.rest_address);
-		like = (EditText) findViewById(R.id.rest_likeOrNot);
 		comment = (EditText) findViewById(R.id.rest_comment);
+
+		final Spinner dropdown = (Spinner) findViewById(R.id.spinner);
+		String[] items = new String[] { "Yes, I like it", "No, I don't like it" };
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+				android.R.layout.simple_spinner_item, items);
+		dropdown.setAdapter(adapter);
+
+		dropdown.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int position, long id) {
+				// TODO Auto-generated method stub
+				s_like = ((Spinner) parent).getSelectedItem().toString();
+
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+				// TODO Auto-generated method stub
+
+			}
+		});
 
 		edit_date = (Button) findViewById(R.id.rest_edit_date_time);
 
@@ -63,19 +89,20 @@ public class AddRestaurent extends Activity {
 				s_name = name.getText().toString();
 				s_date = date.getText().toString();
 				s_address = address.getText().toString();
-				s_like = like.getText().toString();
 				s_comment = comment.getText().toString();
 
 				final ContentResolver resolver = getContentResolver();
 				ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 				Builder productBuilder = ContentProviderOperation
-						.newInsert(Restaurents.CONTENT_URI);
-				productBuilder.withValue(Restaurents.ID, 1);
-				productBuilder.withValue(Restaurents.Name, s_name);
-				productBuilder.withValue(Restaurents.Adress, s_address);
-				productBuilder.withValue(Restaurents.Date, new Date().getTime());
-				productBuilder.withValue(Restaurents.LikeOrNot, s_like);
-				productBuilder.withValue(Restaurents.Comment, s_comment);
+						.newInsert(Memoirs.CONTENT_URI);
+				productBuilder.withValue(Memoirs.ID, 1);
+				productBuilder.withValue(Memoirs.Name, s_name);
+				productBuilder.withValue(Memoirs.TYPE, "Restaurent");
+				productBuilder.withValue(Memoirs.Address, s_address);
+				productBuilder.withValue(Memoirs.Start_Date,
+						new Date().getTime());
+				productBuilder.withValue(Memoirs.LikeOrNot, s_like);
+				productBuilder.withValue(Memoirs.Comment, s_comment);
 				operations.add(productBuilder.build());
 				try {
 					resolver.applyBatch(DatabaseHelper.CONTENT_AUTHORITY,

@@ -10,5 +10,17 @@
     <string name="add_trip">Trip</string>
     <string name="add_hotel">Hotel</string>
     <string name="add_flight">Flight</string>
+    <string name="rest_name">Restaurent Name</string>
+    <string name="place_name">Place Name</string>
+    <string name="hotel_name">Hotel Name</string>
+    <string name="flight_name">Flight Name</string>
+    <string name="trip_name">Trip Name</string>
+    <string name="date_time">Date &amp; Time</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="save_to_trip">Save &amp; Add to Trip</string>
+    <string name="address">Address</string>
+    <string name="comment">Comment</string>
+    <string name="do_u_like">Do you like it?</string>
 
 </resources>

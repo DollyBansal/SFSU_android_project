@@ -48,7 +48,7 @@ public class DatabaseBuilder {
 	}
 
 	public DatabaseBuilder withColumn(String columnName, ColumnType type) {
-		return withColumn(columnName, type.toString() + " NOT NULL");
+		return withColumn(columnName, type.toString());
 	}
 
 	public DatabaseBuilder withColumn(String columnName, String attributes) {

@@ -6,12 +6,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.memoir.utils.DatabaseUtils;
-
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+
+import com.memoir.utils.DatabaseUtils;
 
 public class SelectionBuilder {
 	// private static final String TAG = makeLogTag(SelectionBuilder.class);

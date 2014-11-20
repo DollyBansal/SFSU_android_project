@@ -14,12 +14,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
-            android:text="@string/rest_name"
+            android:text="@string/trip_name"
             android:textColor="@color/add_text_color"
             android:textSize="@dimen/add_heading" />
 
         <EditText
-            android:id="@+id/rest_name"
+            android:id="@+id/trip_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/name"
@@ -28,55 +28,56 @@
             android:textSize="@dimen/add_fill" />
 
         <TextView
-            android:id="@+id/date"
+            android:id="@+id/start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rest_name"
+            android:layout_below="@+id/trip_name"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
-            android:text="@string/date_time"
+            android:text="Start Date"
             android:textColor="@color/add_text_color"
             android:textSize="@dimen/add_heading" />
 
         <TextView
-            android:id="@+id/rest_date"
+            android:id="@+id/trip_start_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/date"
+            android:layout_below="@+id/start_date"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
             android:textColor="@color/add_edit_text_color"
             android:textSize="@dimen/add_fill" />
 
         <Button
-            android:id="@+id/rest_edit_date_time"
+            android:id="@+id/trip_edit_date_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/rest_date"
-            android:layout_below="@+id/date"
+            android:layout_alignBaseline="@+id/trip_start_date"
+            android:layout_below="@+id/start_date"
             android:layout_marginLeft="20dp"
-            android:layout_toRightOf="@+id/rest_date"
+            android:layout_toRightOf="@+id/trip_start_date"
             android:background="@color/transparent"
             android:text="@string/edit"
             android:visibility="gone" />
 
         <TextView
-            android:id="@+id/address"
+            android:id="@+id/end_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rest_date"
+            android:layout_below="@+id/trip_start_date"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
-            android:text="@string/address"
+            android:text="End Date"
             android:textColor="@color/add_text_color"
             android:textSize="@dimen/add_heading" />
 
-        <EditText
-            android:id="@+id/rest_address"
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/trip_end_date"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/address"
-            android:maxLines="3"
+            android:layout_below="@+id/end_date"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="10dp"
             android:textColor="@color/add_edit_text_color"
             android:textSize="@dimen/add_fill" />
 
@@ -84,7 +85,7 @@
             android:id="@+id/likeOrNot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rest_address"
+            android:layout_below="@+id/trip_end_date"
             android:layout_marginLeft="16dp"
             android:layout_marginTop="10dp"
             android:text="@string/do_u_like"
@@ -110,7 +111,7 @@
             android:textSize="@dimen/add_heading" />
 
         <EditText
-            android:id="@+id/rest_comment"
+            android:id="@+id/trip_comment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/comment"
@@ -119,31 +120,17 @@
             android:textSize="@dimen/add_fill" />
 
         <Button
-            android:id="@+id/rest_save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rest_comment"
-            android:layout_marginBottom="16dip"
-            android:layout_marginTop="10dip"
-            android:layout_toLeftOf="@+id/rest_saveToTrip"
-            android:background="@drawable/save_button_bg"
-            android:padding="6dip"
-            android:text="@string/save"
-            android:textColor="@color/add_text_color" />
-
-        <Button
-            android:id="@+id/rest_saveToTrip"
+            android:id="@+id/trip_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/rest_comment"
+            android:layout_below="@+id/trip_comment"
             android:layout_marginBottom="16dip"
-            android:layout_marginLeft="16dip"
             android:layout_marginRight="10dip"
             android:layout_marginTop="10dip"
             android:background="@drawable/save_button_bg"
             android:padding="6dip"
-            android:text="@string/save_to_trip"
+            android:text="@string/save"
             android:textColor="@color/add_text_color" />
     </RelativeLayout>
 

@@ -12,32 +12,33 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.memoir.R;
-import com.memoir.model.Restaurent.Restaurents;
+import com.memoir.model.Memoir.Memoirs;
 import com.memoir.provider.DatabaseHelper.Tables;
 import com.memoir.utils.DatabaseUtils;
 
-public class RestaurentCursorAdapter extends CursorAdapter {
+public class MemoirCursorAdapter extends CursorAdapter {
 	private TextView name, t_date, like, comment;
 	private String s_name, s_date, s_like, s_comment;
 	private final DateFormat mDateFormat = DateFormat
 			.getDateInstance(DateFormat.MEDIUM);
 
-	public RestaurentCursorAdapter(Context context, Cursor c) {
+	public MemoirCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 	}
 
-	public interface RestaurentQuery {
-		String[] PROJECTION = DatabaseUtils.prefixProjection(Tables.RESTAURENT,
-				Restaurents._ID, Restaurents.ID, Restaurents.Name,
-				Restaurents.Adress, Restaurents.Date, Restaurents.LikeOrNot,
-				Restaurents.Comment);
+	public interface MemoirQuery {
+		String[] PROJECTION = DatabaseUtils.prefixProjection(Tables.MEMOIR,
+				Memoirs._ID, Memoirs.ID, Memoirs.Name, Memoirs.Address,
+				Memoirs.Start_Date, Memoirs.End_Date, Memoirs.LikeOrNot,
+				Memoirs.Comment);
 
 		int ID = 1;
 		int NAME = 2;
 		int ADDRESS = 3;
-		int DATE = 4;
-		int LIKE = 5;
-		int COMMENT = 6;
+		int STARTDATE = 4;
+		int ENDDATE = 5;
+		int LIKE = 6;
+		int COMMENT = 7;
 
 	}
 
@@ -47,19 +48,19 @@ public class RestaurentCursorAdapter extends CursorAdapter {
 	}
 
 	private void populateView(View view, Cursor cursor) {
-		s_name = cursor.getString(RestaurentQuery.NAME);
+		s_name = cursor.getString(MemoirQuery.NAME);
 		name = (TextView) view.findViewById(R.id.list_name);
 		name.setText(s_name);
 
-		Date date = new Date(cursor.getLong(RestaurentQuery.DATE));
+		Date date = new Date(cursor.getLong(MemoirQuery.STARTDATE));
 		t_date = (TextView) view.findViewById(R.id.list_date);
 		t_date.setText(mDateFormat.format(date));
 
-		s_like = cursor.getString(RestaurentQuery.NAME);
+		s_like = cursor.getString(MemoirQuery.LIKE);
 		like = (TextView) view.findViewById(R.id.list_like);
 		like.setText(s_like);
 
-		s_comment = cursor.getString(RestaurentQuery.NAME);
+		s_comment = cursor.getString(MemoirQuery.COMMENT);
 		comment = (TextView) view.findViewById(R.id.list_comment);
 		comment.setText(s_comment);
 

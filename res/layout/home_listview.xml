@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="#585858"
     android:orientation="vertical"
     android:padding="6dip" >
 
@@ -10,21 +9,22 @@
         android:id="@+id/list_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textSize="18sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/list_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-       android:layout_alignParentRight="true"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_alignParentRight="true"
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/list_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/list_name"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/list_comment"
@@ -32,6 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/list_like"
         android:maxLines="2"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textSize="14sp" />
 
 </RelativeLayout>

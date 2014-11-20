@@ -10,6 +10,7 @@ import android.net.Uri;
 
 import com.memoir.model.Flight.Flights;
 import com.memoir.model.Hotel.Hotels;
+import com.memoir.model.Memoir.Memoirs;
 import com.memoir.model.Place.Places;
 import com.memoir.model.Restaurent.Restaurents;
 import com.memoir.model.Trip.Trips;
@@ -20,6 +21,7 @@ public class MemoirContentProvider extends ContentProvider {
 	private static final int RESTAURENT = 102;
 	private static final int HOTEL = 103;
 	private static final int FLIGHT = 104;
+	private static final int MEMOIR = 105;
 
 	private static UriMatcher uriMatcher = buildUriMatcher();
 
@@ -32,6 +34,7 @@ public class MemoirContentProvider extends ContentProvider {
 		matcher.addURI(authority, "restaurent", RESTAURENT);
 		matcher.addURI(authority, "hotel", HOTEL);
 		matcher.addURI(authority, "flight", FLIGHT);
+		matcher.addURI(authority, "memoir", MEMOIR);
 
 		return matcher;
 	}
@@ -58,6 +61,8 @@ public class MemoirContentProvider extends ContentProvider {
 			return Hotels.CONTENT_TYPE;
 		case FLIGHT:
 			return Flights.CONTENT_TYPE;
+		case MEMOIR:
+			return Memoirs.CONTENT_TYPE;
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
@@ -110,6 +115,11 @@ public class MemoirContentProvider extends ContentProvider {
 					null, values);
 			getContext().getContentResolver().notifyChange(uri, null, false);
 			return Flights.buildFlightUri(values.getAsString(Flights.Name));
+		case MEMOIR:
+			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.MEMOIR,
+					null, values);
+			getContext().getContentResolver().notifyChange(uri, null, false);
+			return Memoirs.buildUri(values.getAsString(Memoirs.Name));
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);
 		}
@@ -156,6 +166,9 @@ public class MemoirContentProvider extends ContentProvider {
 		case TRIP:
 			return builder
 					.table(com.memoir.provider.DatabaseHelper.Tables.TRIP);
+		case MEMOIR:
+			return builder
+					.table(com.memoir.provider.DatabaseHelper.Tables.MEMOIR);
 
 		default:
 			throw new UnsupportedOperationException("Unknown uri: " + uri);

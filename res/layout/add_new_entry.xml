@@ -8,35 +8,50 @@
         android:id="@+id/addTrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:background="@drawable/add_new_entery_button_bg"
         android:drawableLeft="@drawable/ic_launcher"
+        android:gravity="left|center"
         android:text="@string/add_trip" />
 
     <Button
         android:id="@+id/addPlace"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:background="@drawable/add_new_entery_button_bg"
         android:drawableLeft="@drawable/ic_launcher"
+        android:gravity="left|center"
         android:text="@string/add_place" />
 
     <Button
         android:id="@+id/addRestaurent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:background="@drawable/add_new_entery_button_bg"
         android:drawableLeft="@drawable/ic_launcher"
+        android:gravity="left|center"
         android:text="@string/add_restaurent" />
 
     <Button
         android:id="@+id/addHotel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:background="@drawable/add_new_entery_button_bg"
         android:drawableLeft="@drawable/ic_launcher"
+        android:gravity="left|center"
         android:text="@string/add_hotel" />
 
     <Button
         android:id="@+id/addFlight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dip"
+        android:background="@drawable/add_new_entery_button_bg"
         android:drawableLeft="@drawable/ic_launcher"
+        android:gravity="left|center"
         android:text="@string/add_flight" />
 
 </LinearLayout>

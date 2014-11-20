@@ -15,18 +15,17 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.memoir.R;
-import com.memoir.adapter.RestaurentCursorAdapter;
-import com.memoir.adapter.RestaurentCursorAdapter.RestaurentQuery;
-import com.memoir.model.Restaurent.Restaurents;
+import com.memoir.adapter.MemoirCursorAdapter;
+import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
+import com.memoir.model.Memoir.Memoirs;
 
 public class HomeActivity extends Activity implements LoaderCallbacks<Cursor> {
 
-	RestaurentCursorAdapter cursorAdapter;
+	MemoirCursorAdapter cursorAdapter;
 
-	private static final int Restaurent_LOADER_ID = 1;
+	private static final int LOADER_ID = 1;
 
-	private final ContentObserver restaurentObserver = new ContentObserver(
-			new Handler()) {
+	private final ContentObserver Observer = new ContentObserver(new Handler()) {
 		@Override
 		public void onChange(boolean selfChange) {
 
@@ -49,17 +48,17 @@ public class HomeActivity extends Activity implements LoaderCallbacks<Cursor> {
 		ListView listView = (ListView) findViewById(R.id.listview_home);
 		listView.setItemsCanFocus(true);
 
-		Cursor cursor = this.getContentResolver().query(
-				Restaurents.CONTENT_URI, RestaurentQuery.PROJECTION, null,
-				null, null);
+		Cursor cursor = this.getContentResolver().query(Memoirs.CONTENT_URI,
+				MemoirQuery.PROJECTION, null, null,
+				MemoirQuery.STARTDATE + " DESC");
 
-		cursorAdapter = new RestaurentCursorAdapter(HomeActivity.this, cursor);
+		cursorAdapter = new MemoirCursorAdapter(HomeActivity.this, cursor);
 		listView.setAdapter(cursorAdapter);
 
-		getLoaderManager().initLoader(Restaurent_LOADER_ID, null, this);
+		getLoaderManager().initLoader(LOADER_ID, null, this);
 
-		this.getContentResolver().registerContentObserver(
-				Restaurents.CONTENT_URI, true, restaurentObserver);
+		this.getContentResolver().registerContentObserver(Memoirs.CONTENT_URI,
+				true, Observer);
 
 	}
 
@@ -87,10 +86,11 @@ public class HomeActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if (id == Restaurent_LOADER_ID) {
+		if (id == LOADER_ID) {
 
-			return new CursorLoader(this, Restaurents.CONTENT_URI,
-					RestaurentQuery.PROJECTION, null, null, null);
+			return new CursorLoader(this, Memoirs.CONTENT_URI,
+					MemoirQuery.PROJECTION, null, null, MemoirQuery.STARTDATE
+							+ " DESC");
 		}
 		return null;
 	}
@@ -99,7 +99,7 @@ public class HomeActivity extends Activity implements LoaderCallbacks<Cursor> {
 	public void onLoadFinished(Loader<Cursor> loader, Cursor cur) {
 
 		switch (loader.getId()) {
-		case Restaurent_LOADER_ID:
+		case LOADER_ID:
 			cursorAdapter.changeCursor(cur);
 		}
 
@@ -113,8 +113,14 @@ public class HomeActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 	@Override
 	protected void onDestroy() {
-		this.getContentResolver().unregisterContentObserver(restaurentObserver);
+		this.getContentResolver().unregisterContentObserver(Observer);
 		super.onDestroy();
+	}
+
+	@Override
+	public void onBackPressed() {
+		finish();
+		super.onBackPressed();
 	}
 
 }

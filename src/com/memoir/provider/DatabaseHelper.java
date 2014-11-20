@@ -7,6 +7,7 @@ import android.net.Uri;
 
 import com.memoir.model.Flight.Flights;
 import com.memoir.model.Hotel.Hotels;
+import com.memoir.model.Memoir.Memoirs;
 import com.memoir.model.Place.Places;
 import com.memoir.model.Restaurent.Restaurents;
 import com.memoir.model.Trip.Trips;
@@ -23,12 +24,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		String RESTAURENT = "restaurent";
 		String HOTEL = "hotel";
 		String FLIGHT = "flight";
+		String MEMOIR = "memoir";
 
 	}
 
 	private static final DatabaseMigration[] MIGRATIONS = new DatabaseMigration[] {
 
 	new DatabaseMigration() {
+		@Override
+		public void apply(SQLiteDatabase db) {
+			String createTable = DatabaseBuilder.createTable(Tables.MEMOIR)
+					.withPrimaryKey(Memoirs._ID).withIntegerColumns(Memoirs.ID)
+					.withTextColumns(Memoirs.Name)
+					.withTextColumns(Memoirs.TYPE)
+					.withTextColumns(Memoirs.Address)
+					.withTextColumns(Memoirs.FlightFrom)
+					.withTextColumns(Memoirs.FlightTo)
+					.withTextColumns(Memoirs.LikeOrNot)
+					.withTextColumns(Memoirs.Comment)
+					.withIntegerColumns(Memoirs.Start_Date)
+					.withIntegerColumns(Memoirs.End_Date).buildSQL();
+
+			db.execSQL(createTable);
+		}
+
+		@Override
+		public void revert(SQLiteDatabase db) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.MEMOIR);
+		}
+
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			db.execSQL("DROP TABLE IF EXISTS " + Tables.MEMOIR);
+
+		}
+
+	}, new DatabaseMigration() {
 		@Override
 		public void apply(SQLiteDatabase db) {
 			String createTripTable = DatabaseBuilder.createTable(Tables.TRIP)
