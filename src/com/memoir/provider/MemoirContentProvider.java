@@ -8,19 +8,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import com.memoir.model.Flight.Flights;
-import com.memoir.model.Hotel.Hotels;
 import com.memoir.model.Memoir.Memoirs;
-import com.memoir.model.Place.Places;
-import com.memoir.model.Restaurent.Restaurents;
-import com.memoir.model.Trip.Trips;
 
 public class MemoirContentProvider extends ContentProvider {
-	private static final int TRIP = 100;
-	private static final int PLACE = 101;
-	private static final int RESTAURENT = 102;
-	private static final int HOTEL = 103;
-	private static final int FLIGHT = 104;
+
 	private static final int MEMOIR = 105;
 
 	private static UriMatcher uriMatcher = buildUriMatcher();
@@ -28,14 +19,7 @@ public class MemoirContentProvider extends ContentProvider {
 	private static UriMatcher buildUriMatcher() {
 		final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 		final String authority = DatabaseHelper.CONTENT_AUTHORITY;
-
-		matcher.addURI(authority, "trip", TRIP);
-		matcher.addURI(authority, "place", PLACE);
-		matcher.addURI(authority, "restaurent", RESTAURENT);
-		matcher.addURI(authority, "hotel", HOTEL);
-		matcher.addURI(authority, "flight", FLIGHT);
 		matcher.addURI(authority, "memoir", MEMOIR);
-
 		return matcher;
 	}
 
@@ -51,16 +35,6 @@ public class MemoirContentProvider extends ContentProvider {
 	public String getType(Uri uri) {
 		final int match = uriMatcher.match(uri);
 		switch (match) {
-		case TRIP:
-			return Trips.CONTENT_TYPE;
-		case PLACE:
-			return Places.CONTENT_TYPE;
-		case RESTAURENT:
-			return Restaurents.CONTENT_TYPE;
-		case HOTEL:
-			return Hotels.CONTENT_TYPE;
-		case FLIGHT:
-			return Flights.CONTENT_TYPE;
 		case MEMOIR:
 			return Memoirs.CONTENT_TYPE;
 		default:
@@ -88,33 +62,7 @@ public class MemoirContentProvider extends ContentProvider {
 		final int match = uriMatcher.match(uri);
 
 		switch (match) {
-		case TRIP:
-			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.TRIP,
-					null, values);
-			getContext().getContentResolver().notifyChange(uri, null, false);
-			return Trips.buildTripUri(values.getAsString(Trips.Name));
-		case RESTAURENT:
-			db.insertOrThrow(
-					com.memoir.provider.DatabaseHelper.Tables.RESTAURENT, null,
-					values);
-			getContext().getContentResolver().notifyChange(uri, null, false);
-			return Restaurents.buildRestaurentUri(values
-					.getAsString(Restaurents.Name));
-		case HOTEL:
-			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.HOTEL,
-					null, values);
-			getContext().getContentResolver().notifyChange(uri, null, false);
-			return Hotels.buildHotelUri(values.getAsString(Hotels.Name));
-		case PLACE:
-			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.PLACE,
-					null, values);
-			getContext().getContentResolver().notifyChange(uri, null, false);
-			return Places.buildPlaceUri(values.getAsString(Places.Name));
-		case FLIGHT:
-			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.FLIGHT,
-					null, values);
-			getContext().getContentResolver().notifyChange(uri, null, false);
-			return Flights.buildFlightUri(values.getAsString(Flights.Name));
+
 		case MEMOIR:
 			db.insertOrThrow(com.memoir.provider.DatabaseHelper.Tables.MEMOIR,
 					null, values);
@@ -151,21 +99,7 @@ public class MemoirContentProvider extends ContentProvider {
 		final SelectionBuilder builder = new SelectionBuilder();
 		final int match = uriMatcher.match(uri);
 		switch (match) {
-		case RESTAURENT:
-			return builder
-					.table(com.memoir.provider.DatabaseHelper.Tables.RESTAURENT);
-		case FLIGHT:
-			return builder
-					.table(com.memoir.provider.DatabaseHelper.Tables.FLIGHT);
-		case PLACE:
-			return builder
-					.table(com.memoir.provider.DatabaseHelper.Tables.PLACE);
-		case HOTEL:
-			return builder
-					.table(com.memoir.provider.DatabaseHelper.Tables.HOTEL);
-		case TRIP:
-			return builder
-					.table(com.memoir.provider.DatabaseHelper.Tables.TRIP);
+
 		case MEMOIR:
 			return builder
 					.table(com.memoir.provider.DatabaseHelper.Tables.MEMOIR);

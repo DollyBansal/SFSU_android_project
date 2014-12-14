@@ -16,7 +16,7 @@ public class AddNewEntry extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_new_entry);
 
-		getActionBar().setTitle("Add a");
+		getActionBar().setTitle(getResources().getString(R.string.add__tittle));
 		Button addTrip = ((Button) this.findViewById(R.id.addTrip));
 		Button addRestaurent = ((Button) this.findViewById(R.id.addRestaurent));
 		Button addHotel = ((Button) this.findViewById(R.id.addHotel));
@@ -32,7 +32,7 @@ public class AddNewEntry extends Activity {
 		addRestaurent.setOnClickListener(new OnClickListener() {
 			public void onClick(View view) {
 				Intent intent = new Intent(AddNewEntry.this,
-						AddRestaurent.class);
+						AddRestaurant.class);
 				startActivity(intent);
 			}
 		});

@@ -37,29 +37,29 @@ import com.memoir.model.Memoir.Memoirs;
 import com.memoir.provider.DatabaseHelper;
 import com.memoir.utils.DateConversion;
 
-public class AddPlace extends Activity {
+public class AddRestaurant extends Activity {
 	Button save, saveToTrip, edit_date;
 	EditText name, address, comment;
 	TextView date;
 	String s_name, s_date, s_address, s_comment, s_like;
 	private Context context = this;
-	DialigListViewCursorAdapter cursorAdapter;
+	private DialigListViewCursorAdapter cursorAdapter;
 	private DateConversion dateConversion;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.add_place);
+		setContentView(R.layout.add_restaurent);
 		dateConversion = new DateConversion();
 		getActionBar().setTitle(
-				getResources().getString(R.string.add__tittle_place));
-		save = (Button) findViewById(R.id.place_save);
-		saveToTrip = (Button) findViewById(R.id.place_saveToTrip);
+				getResources().getString(R.string.add__tittle_restaurant));
+		save = (Button) findViewById(R.id.rest_save);
+		saveToTrip = (Button) findViewById(R.id.rest_saveToTrip);
 
-		name = (EditText) findViewById(R.id.place_name);
-		date = (TextView) findViewById(R.id.place_date);
-		address = (EditText) findViewById(R.id.place_address);
-		comment = (EditText) findViewById(R.id.place_comment);
+		name = (EditText) findViewById(R.id.rest_name);
+		date = (TextView) findViewById(R.id.rest_date);
+		address = (EditText) findViewById(R.id.rest_address);
+		comment = (EditText) findViewById(R.id.rest_comment);
 
 		final Spinner dropdown = (Spinner) findViewById(R.id.spinner);
 		String[] items = new String[] {
@@ -74,7 +74,6 @@ public class AddPlace extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
-				// TODO Auto-generated method stub
 				s_like = ((Spinner) parent).getSelectedItem().toString();
 
 			}
@@ -86,7 +85,7 @@ public class AddPlace extends Activity {
 			}
 		});
 
-		edit_date = (Button) findViewById(R.id.place_edit_date_time);
+		edit_date = (Button) findViewById(R.id.rest_edit_date_time);
 
 		Calendar c = Calendar.getInstance();
 		String strDateTime = (c.get(Calendar.MONTH) + 1) + "/"
@@ -119,6 +118,7 @@ public class AddPlace extends Activity {
 
 					Date startDate = dateConversion.stringToDate(s_date);
 					long sDate = startDate.getTime();
+
 					final ContentResolver resolver = getContentResolver();
 					ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 					Builder productBuilder = ContentProviderOperation
@@ -126,7 +126,7 @@ public class AddPlace extends Activity {
 					productBuilder.withValue(Memoirs.ID, 1);
 					productBuilder.withValue(Memoirs.Name, s_name);
 					productBuilder.withValue(Memoirs.TYPE, getResources()
-							.getString(R.string.place));
+							.getString(R.string.restaurent));
 					productBuilder.withValue(Memoirs.Address, s_address);
 					productBuilder.withValue(Memoirs.Start_Date, sDate);
 					productBuilder.withValue(Memoirs.LikeOrNot, s_like);
@@ -144,14 +144,15 @@ public class AddPlace extends Activity {
 						e.printStackTrace();
 					}
 					// start Home Activity
-					Intent intent = new Intent(AddPlace.this,
+					Intent intent = new Intent(AddRestaurant.this,
 							HomeActivity.class);
 					startActivity(intent);
 				}
+
 			}
 		});
 
-		// save to trip & database
+		// on button click to save in a particular trip
 		saveToTrip.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
 
@@ -173,6 +174,7 @@ public class AddPlace extends Activity {
 							"Please enter comment ", Toast.LENGTH_LONG).show();
 
 				} else {
+
 					final Dialog dialog = new Dialog(context);
 
 					dialog.setContentView(R.layout.custom_add_to_trip_dialog_box);
@@ -186,7 +188,7 @@ public class AddPlace extends Activity {
 							new String[] { String.valueOf("TRIP") }, null);
 
 					cursorAdapter = new DialigListViewCursorAdapter(
-							AddPlace.this, curs);
+							AddRestaurant.this, curs);
 					listView.setAdapter(cursorAdapter);
 					listView.setOnItemClickListener(new OnItemClickListener() {
 
@@ -205,14 +207,17 @@ public class AddPlace extends Activity {
 							Date startDate = dateConversion
 									.stringToDate(s_date);
 							long sDate = startDate.getTime();
+
 							final ContentResolver resolver = getContentResolver();
 							ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 							Builder productBuilder = ContentProviderOperation
 									.newInsert(Memoirs.CONTENT_URI);
 							productBuilder.withValue(Memoirs.ID, 1);
 							productBuilder.withValue(Memoirs.Name, s_name);
-							productBuilder.withValue(Memoirs.TYPE,
-									getResources().getString(R.string.place));
+							productBuilder.withValue(
+									Memoirs.TYPE,
+									getResources().getString(
+											R.string.restaurent));
 							productBuilder.withValue(Memoirs.TRIP_NAME,
 									addtoTrip);
 							productBuilder
@@ -234,10 +239,9 @@ public class AddPlace extends Activity {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
-							// start Home Activity
 
 							int s_id = curs.getInt(MemoirQuery._ID);
-							Intent intent = new Intent(AddPlace.this,
+							Intent intent = new Intent(AddRestaurant.this,
 									DetailTripViewActivity.class);
 
 							Bundle mBundle = new Bundle();
@@ -276,7 +280,7 @@ public class AddPlace extends Activity {
 			}
 		});
 
-		// add date
+		// edit date and time in dialogBox
 		date.setOnClickListener(new View.OnClickListener() {
 
 			public void onClick(View view) {
@@ -299,8 +303,6 @@ public class AddPlace extends Activity {
 						now.setToNow();
 						tp.setCurrentHour(now.hour);
 						tp.setCurrentMinute(now.minute);
-
-						// update the DatePicker
 						dp.updateDate(now.year, now.month, now.monthDay);
 						dialog.dismiss();
 					}
@@ -313,8 +315,6 @@ public class AddPlace extends Activity {
 						now.setToNow();
 						tp.setCurrentHour(now.hour);
 						tp.setCurrentMinute(now.minute);
-
-						// update the DatePicker
 						dp.updateDate(now.year, now.month, now.monthDay);
 					}
 				});
