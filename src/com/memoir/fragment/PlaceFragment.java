@@ -1,10 +1,10 @@
-package com.memoir.ui.fragment;
+package com.memoir.fragment;
 
 import com.memoir.R;
 import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
 import com.memoir.model.Memoir.Memoirs;
 
-public class HotelFragment extends HomeListViewAllFragment {
+public class PlaceFragment extends HomeListViewAllFragment {
 
 	@Override
 	protected String stringSelection() {
@@ -15,7 +15,7 @@ public class HotelFragment extends HomeListViewAllFragment {
 	@Override
 	protected String[] stringArgument() {
 		// TODO Auto-generated method stub
-		String str = getResources().getString(R.string.hotel);
+		String str = getResources().getString(R.string.place);
 		return new String[] { str };
 	}
 

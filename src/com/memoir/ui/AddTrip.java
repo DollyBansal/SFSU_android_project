@@ -12,6 +12,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.text.format.Time;
@@ -28,15 +29,16 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.memoir.R;
+import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
 import com.memoir.model.Memoir.Memoirs;
 import com.memoir.provider.DatabaseHelper;
 import com.memoir.utils.DateConversion;
 
 public class AddTrip extends Activity {
-	Button save, edit_date;
-	EditText name, comment;
-	TextView start_date, end_date;
-	String s_name, s_start_date, s_end_date, s_comment, s_like;
+	private Button save;
+	private EditText name, comment;
+	private TextView start_date, end_date;
+	private String s_name, s_start_date, s_end_date, s_comment, s_like;
 	private Context context = this;
 	private DateConversion dateConversion;
 
@@ -79,8 +81,6 @@ public class AddTrip extends Activity {
 			}
 		});
 
-		edit_date = (Button) findViewById(R.id.trip_edit_date_time);
-
 		Calendar c = Calendar.getInstance();
 		String strDateTime = (c.get(Calendar.MONTH) + 1) + "/"
 				+ c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.YEAR)
@@ -89,23 +89,31 @@ public class AddTrip extends Activity {
 		start_date.setText(strDateTime);
 		end_date.setText(strDateTime);
 
-		/*
-		 * Bundle bundle1 = getIntent().getExtras(); String datas =
-		 * bundle1.getString("id"); Cursor cursor =
-		 * this.getContentResolver().query(Memoirs.CONTENT_URI,
-		 * MemoirQuery.PROJECTION, Memoirs.BY_Name, new String[] {
-		 * String.valueOf(datas) }, null);
-		 * 
-		 * if (datas != null) {
-		 * 
-		 * String namee = cursor.getString(MemoirQuery.NAME);
-		 * name.setText(namee); s_start_date =
-		 * cursor.getString(MemoirQuery.STARTDATE);
-		 * start_date.setText(s_start_date); s_end_date =
-		 * cursor.getString(MemoirQuery.ENDDATE); end_date.setText(s_end_date);
-		 * s_comment = cursor.getString(MemoirQuery.COMMENT);
-		 * comment.setText(s_comment); }
-		 */
+		Bundle bundle1 = getIntent().getExtras();
+		int datas = 0;
+		if (bundle1 != null) {
+			datas = bundle1.getInt("idd");
+		}
+
+		if (datas != 0) {
+			Cursor curs = this.getContentResolver().query(Memoirs.CONTENT_URI,
+					MemoirQuery.PROJECTION, Memoirs.BY_ID,
+					new String[] { String.valueOf(datas) }, null);
+			curs.moveToFirst();
+
+			String db_name = curs.getString(MemoirQuery.NAME);
+			Date startDate = new Date(curs.getLong(MemoirQuery.STARTDATE));
+			String db_s_date = dateConversion.dateToString(startDate);
+			Date endDate = new Date(curs.getLong(MemoirQuery.ENDDATE));
+			String db_e_date = dateConversion.dateToString(endDate);
+			String db_comment = curs.getString(MemoirQuery.COMMENT);
+
+			name.setText(db_name);
+			start_date.setText(db_s_date);
+			end_date.setText(db_e_date);
+			comment.setText(db_comment);
+
+		}
 
 		// save to database
 		save.setOnClickListener(new View.OnClickListener() {

@@ -1,4 +1,4 @@
-package com.memoir.ui.fragment;
+package com.memoir.fragment;
 
 import com.memoir.R;
 import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;

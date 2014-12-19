@@ -106,7 +106,9 @@ public class HomeActivity extends Activity implements LoaderCallbacks<Cursor> {
 
 		switch (loader.getId()) {
 		case LOADER_ID:
+
 			cursorAdapter.changeCursor(cur);
+
 			listView.setOnItemClickListener(new OnItemClickListener() {
 
 				@Override

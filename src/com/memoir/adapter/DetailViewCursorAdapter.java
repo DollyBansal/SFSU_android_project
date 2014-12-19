@@ -3,33 +3,25 @@ package com.memoir.adapter;
 import java.util.Date;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.memoir.R;
 import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
-import com.memoir.ui.AddFlight;
-import com.memoir.ui.AddHotel;
-import com.memoir.ui.AddPlace;
-import com.memoir.ui.AddRestaurant;
-import com.memoir.ui.AddTrip;
 import com.memoir.utils.DateConversion;
 
 public class DetailViewCursorAdapter extends CursorAdapter {
-	TextView name, start_date, end_date, address, flight_to, flight_from,
-			likeOrNot, comment;
-	String s_name, s_start_date, s_end_date, s_address, s_flight_to,
+	private TextView name, start_date, end_date, address, flight_to,
+			flight_from, likeOrNot, comment;
+	private String s_name, s_start_date, s_end_date, s_address, s_flight_to,
 			s_flight_from, s_comment, s_likeOrNot;
-	String s_id;
-	String type;
-	DateConversion dateConversion;
+	private String s_id;
+	private String type;
+	private DateConversion dateConversion;
 
 	public DetailViewCursorAdapter(Context context, Cursor c) {
 		super(context, c);
@@ -63,9 +55,12 @@ public class DetailViewCursorAdapter extends CursorAdapter {
 		start_date.setText(s_start_date);
 
 		end_date = (TextView) view.findViewById(R.id.end_date_detail);
-		Date endDate = new Date(cursor.getLong(MemoirQuery.ENDDATE));
-		s_end_date = dateConversion.dateToString(endDate);
-		end_date.setText(s_end_date);
+		long datee = cursor.getLong(MemoirQuery.ENDDATE);
+		if (datee != 0) {
+			Date endDate = new Date(cursor.getLong(MemoirQuery.ENDDATE));
+			s_end_date = dateConversion.dateToString(endDate);
+			end_date.setText(s_end_date);
+		}
 
 		address = (TextView) view.findViewById(R.id.address_detail);
 		s_address = cursor.getString(MemoirQuery.ADDRESS);
@@ -129,48 +124,6 @@ public class DetailViewCursorAdapter extends CursorAdapter {
 			flight_from.setLayoutParams(layoutParams_c);
 		}
 
-		ImageButton btn = (ImageButton) view.findViewById(R.id.imageButton1);
-		int pos = cursor.getPosition();
-		btn.setTag(pos);
-		btn.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Integer pos = (Integer) v.getTag();
-
-				System.out.println("poss:: " + pos);
-
-				Intent intent = null;
-				if (type.equals(getContext().getResources().getString(
-						R.string.restaurent))) {
-					intent = new Intent(getContext(), AddRestaurant.class);
-
-				} else if (type.equals(getContext().getResources().getString(
-						R.string.trip))) {
-					intent = new Intent(getContext(), AddTrip.class);
-
-				} else if (type.equals(getContext().getResources().getString(
-						R.string.place))) {
-					intent = new Intent(getContext(), AddPlace.class);
-
-				} else if (type.equals(getContext().getResources().getString(
-						R.string.hotel))) {
-					intent = new Intent(getContext(), AddHotel.class);
-
-				} else if (type.equals(getContext().getResources().getString(
-						R.string.flight))) {
-					intent = new Intent(getContext(), AddFlight.class);
-
-				}
-
-				s_id = cursor.getString(MemoirQuery.ID);
-				// Bundle mBundle = new Bundle();
-				// mBundle.putString("id", s_id);
-				// intent.putExtras(mBundle);
-				getContext().startActivity(intent);
-
-			}
-		});
 		cursor.moveToNext();
 	}
 

@@ -1,67 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" >
+    <TextView
+        android:id="@+id/name_detail_trip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/add_edit_text_color"
+        android:textSize="@dimen/add_fill"
+        android:textStyle="bold" />
 
-        <ImageButton
-            android:id="@+id/imageButton1_trip"
-            android:layout_width="40dp"
-            android:layout_height="40dip"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="10dip"
-            android:scaleType="centerInside"
-            android:src="@drawable/file_edit" />
+    <TextView
+        android:id="@+id/start_date_detail_trip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_detail_trip"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/add_text_color"
+        android:textSize="@dimen/add_heading" />
 
-        <TextView
-            android:id="@+id/name_detail_trip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingTop="10dp"
-             android:textColor="@color/add_edit_text_color"
-            android:textSize="@dimen/add_fill"/>
+    <TextView
+        android:id="@+id/end_date_detail_trip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_detail_trip"
+        android:layout_toRightOf="@+id/start_date_detail_trip"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/add_text_color"
+        android:textSize="@dimen/add_heading" />
 
-        <TextView
-            android:id="@+id/start_date_detail_trip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/name_detail_trip"
-            android:paddingLeft="16dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/add_text_color"
-            android:textSize="@dimen/add_heading" />
+    <TextView
+        android:id="@+id/like_detail_trip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/start_date_detail_trip"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/add_text_color"
+        android:textSize="@dimen/add_heading" />
 
-        <TextView
-            android:id="@+id/end_date_detail_trip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/name_detail_trip"
-            android:layout_toRightOf="@+id/start_date_detail_trip"
-            android:paddingLeft="16dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/add_text_color"
-            android:textSize="@dimen/add_heading" />
+    <TextView
+        android:id="@+id/comment_detail_trip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/like_detail_trip"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:textColor="@color/add_text_color"
+        android:textSize="@dimen/add_heading" />
 
-        <TextView
-            android:id="@+id/like_detail_trip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/start_date_detail_trip"
-            android:paddingLeft="16dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/add_text_color"
-            android:textSize="@dimen/add_heading" />
-
-        <TextView
-            android:id="@+id/comment_detail_trip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/like_detail_trip"
-            android:paddingLeft="16dp"
-            android:paddingTop="10dp"
-            android:textColor="@color/add_text_color"
-            android:textSize="@dimen/add_heading" />
-    </RelativeLayout>
+</RelativeLayout>

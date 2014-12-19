@@ -1,8 +1,18 @@
 package com.memoir.ui;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
+import org.json.JSONObject;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -13,14 +23,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
 import android.database.Cursor;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -30,35 +49,92 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.maps.model.LatLng;
 import com.memoir.R;
-import com.memoir.adapter.DialigListViewCursorAdapter;
+import com.memoir.adapter.DialogListViewCursorAdapter;
 import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
 import com.memoir.model.Memoir.Memoirs;
+import com.memoir.network.PlaceJSONParser;
 import com.memoir.provider.DatabaseHelper;
 import com.memoir.utils.DateConversion;
 
-public class AddRestaurant extends Activity {
-	Button save, saveToTrip, edit_date;
-	EditText name, address, comment;
-	TextView date;
-	String s_name, s_date, s_address, s_comment, s_like;
+public class AddRestaurant extends Activity implements LocationListener {
+	private Button save, saveToTrip;
+	private EditText name, comment;
+	private TextView date;
+	private String s_name, s_date, s_address, s_comment, s_like;
 	private Context context = this;
-	private DialigListViewCursorAdapter cursorAdapter;
+	private DialogListViewCursorAdapter cursorAdapter;
 	private DateConversion dateConversion;
+	private AutoCompleteTextView address;
+	private ArrayAdapter<String> adapter;
+
+	double mLatitude = 0;
+	double mLongitude = 0;
+	private ArrayList<String> resultList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.add_restaurent);
+
 		dateConversion = new DateConversion();
+
 		getActionBar().setTitle(
 				getResources().getString(R.string.add__tittle_restaurant));
+
 		save = (Button) findViewById(R.id.rest_save);
 		saveToTrip = (Button) findViewById(R.id.rest_saveToTrip);
 
 		name = (EditText) findViewById(R.id.rest_name);
 		date = (TextView) findViewById(R.id.rest_date);
-		address = (EditText) findViewById(R.id.rest_address);
+
+		address = (AutoCompleteTextView) findViewById(R.id.rest_address);
+
+		// address.requestFocus();
+
+		address.setAdapter(adapter);
+
+		address.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+					long arg3) {
+
+				System.out.println("click on autocomple");
+
+				// network();
+
+			}
+		});
+
+		address.addTextChangedListener(new TextWatcher() {
+
+			@Override
+			public void onTextChanged(CharSequence charEnter, int start,
+					int before, int count) {
+				if (charEnter.length() > 2)
+					network(charEnter);
+
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				// TODO Auto-generated method stub
+				// if (address.getText().length() > 2)
+				// network(address.getText());
+
+			}
+		});
 		comment = (EditText) findViewById(R.id.rest_comment);
 
 		final Spinner dropdown = (Spinner) findViewById(R.id.spinner);
@@ -74,6 +150,7 @@ public class AddRestaurant extends Activity {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
 					int position, long id) {
+
 				s_like = ((Spinner) parent).getSelectedItem().toString();
 
 			}
@@ -85,14 +162,37 @@ public class AddRestaurant extends Activity {
 			}
 		});
 
-		edit_date = (Button) findViewById(R.id.rest_edit_date_time);
-
 		Calendar c = Calendar.getInstance();
 		String strDateTime = (c.get(Calendar.MONTH) + 1) + "/"
 				+ c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.YEAR)
 				+ " " + c.get(Calendar.HOUR_OF_DAY) + ":"
 				+ c.get(Calendar.MINUTE);
 		date.setText(strDateTime);
+
+		Bundle bundle1 = getIntent().getExtras();
+		int datas = 0;
+		if (bundle1 != null) {
+			datas = bundle1.getInt("idd");
+		}
+
+		if (datas != 0) {
+			Cursor curs = this.getContentResolver().query(Memoirs.CONTENT_URI,
+					MemoirQuery.PROJECTION, Memoirs.BY_ID,
+					new String[] { String.valueOf(datas) }, null);
+			curs.moveToFirst();
+
+			String db_name = curs.getString(MemoirQuery.NAME);
+			Date startDate = new Date(curs.getLong(MemoirQuery.STARTDATE));
+			String db_date = dateConversion.dateToString(startDate);
+			String db_address = curs.getString(MemoirQuery.ADDRESS);
+			String db_comment = curs.getString(MemoirQuery.COMMENT);
+
+			name.setText(db_name);
+			date.setText(db_date);
+			address.setText(db_address);
+			comment.setText(db_comment);
+
+		}
 
 		// save to database
 		save.setOnClickListener(new View.OnClickListener() {
@@ -187,7 +287,7 @@ public class AddRestaurant extends Activity {
 							Memoirs.BY_Type,
 							new String[] { String.valueOf("TRIP") }, null);
 
-					cursorAdapter = new DialigListViewCursorAdapter(
+					cursorAdapter = new DialogListViewCursorAdapter(
 							AddRestaurant.this, curs);
 					listView.setAdapter(cursorAdapter);
 					listView.setOnItemClickListener(new OnItemClickListener() {
@@ -336,6 +436,230 @@ public class AddRestaurant extends Activity {
 				dialog.show();
 			}
 		});
+	}
+
+	@Override
+	public void onLocationChanged(Location location) {
+		mLatitude = location.getLatitude();
+		mLongitude = location.getLongitude();
+		LatLng latLng = new LatLng(mLatitude, mLongitude);
+
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void network(CharSequence charEnter) {
+		// Getting Google Play availability status
+		int status = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(getBaseContext());
+
+		if (status != ConnectionResult.SUCCESS) { // Google Play Services are
+													// not available
+
+			int requestCode = 10;
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(status, this,
+					requestCode);
+			dialog.show();
+
+		} else { // Google Play Services are available
+
+			// Getting LocationManager object from System Service
+			// LOCATION_SERVICE
+			LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+			// Creating a criteria object to retrieve provider
+			Criteria criteria = new Criteria();
+
+			// Getting the name of the best provider
+			String provider = locationManager.getBestProvider(criteria, true);
+
+			// Getting Current Location From GPS
+			Location location = locationManager.getLastKnownLocation(provider);
+
+			if (location != null) {
+				onLocationChanged(location);
+			}
+
+			locationManager.requestLocationUpdates(provider, 20000, 0, this);
+
+			StringBuilder sb = new StringBuilder(
+					"https://maps.googleapis.com/maps/api/place/nearbysearch/json?");
+			sb.append("location=" + mLatitude + "," + mLongitude);
+			sb.append("&radius=5000");
+			sb.append("&name=@" + charEnter);
+			sb.append("&sensor=true");
+			sb.append("&key=AIzaSyDpbGqEqIDq9YZDh6nk2ce9i6435EH1N40");
+
+			// Creating a new non-ui thread task to download Google place json
+			// data
+			PlacesTask placesTask = new PlacesTask();
+
+			// Invokes the "doInBackground()" method of the class PlaceTask
+			placesTask.execute(sb.toString());
+
+		}
+
+	}
+
+	/** A method to download json data from url */
+	private String downloadUrl(String strUrl) throws IOException {
+		String data = "";
+		InputStream iStream = null;
+		HttpURLConnection urlConnection = null;
+		try {
+			URL url = new URL(strUrl);
+
+			// Creating an http connection to communicate with url
+			urlConnection = (HttpURLConnection) url.openConnection();
+
+			// Connecting to url
+			urlConnection.connect();
+
+			// Reading data from url
+			iStream = urlConnection.getInputStream();
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(
+					iStream));
+
+			StringBuffer sb = new StringBuffer();
+
+			String line = "";
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+			data = sb.toString();
+
+			br.close();
+
+		} catch (Exception e) {
+			Log.d("Exception while downloading url", e.toString());
+		} finally {
+			iStream.close();
+			urlConnection.disconnect();
+		}
+
+		return data;
+	}
+
+	/** A class, to download Google Places */
+	private class PlacesTask extends AsyncTask<String, Integer, String> {
+
+		String data = null;
+
+		// Invoked by execute() method of this object
+		@Override
+		protected String doInBackground(String... url) {
+			try {
+				data = downloadUrl(url[0]);
+			} catch (Exception e) {
+				Log.d("Background Task", e.toString());
+			}
+			return data;
+		}
+
+		// Executed after the complete execution of doInBackground() method
+		@Override
+		protected void onPostExecute(String result) {
+			ParserTask parserTask = new ParserTask();
+			// Start parsing the Google places in JSON format
+			// Invokes the "doInBackground()" method of the class ParseTask
+			if (result != null) {
+				parserTask.execute(result);
+			}
+		}
+
+	}
+
+	/** A class to parse the Google Places in JSON format */
+	private class ParserTask extends
+			AsyncTask<String, Integer, List<HashMap<String, String>>> {
+
+		JSONObject jObject;
+
+		// Invoked by execute() method of this object
+		@Override
+		protected List<HashMap<String, String>> doInBackground(
+				String... jsonData) {
+
+			List<HashMap<String, String>> places = null;
+			PlaceJSONParser placeJsonParser = new PlaceJSONParser();
+
+			try {
+				jObject = new JSONObject(jsonData[0]);
+
+				/** Getting the parsed data as a List construct */
+				places = placeJsonParser.parse(jObject);
+				for (int i = 0; i <= places.size(); i++) {
+
+				}
+
+			} catch (Exception e) {
+				Log.d("Exception", e.toString());
+			}
+			return places;
+		}
+
+		// Executed after the complete execution of doInBackground() method
+		@Override
+		protected void onPostExecute(List<HashMap<String, String>> list) {
+
+			resultList = new ArrayList<String>(list.size());
+
+			String array[] = new String[list.size()];
+
+			for (int i = 0; i < list.size(); i++) {
+
+				// Getting a place from the places list
+				HashMap<String, String> hmPlace = list.get(i);
+				// Getting latitude of the place
+				double lat = Double.parseDouble(hmPlace.get("lat"));
+
+				// Getting longitude of the place
+				double lng = Double.parseDouble(hmPlace.get("lng"));
+
+				// Getting name
+				String name = hmPlace.get("place_name");
+
+				// Getting vicinity
+				String vicinity = hmPlace.get("vicinity");
+
+				// Setting the position for the marker
+				resultList.add(name + " " + vicinity);
+
+				array[i] = resultList.get(i);
+
+			}
+
+			adapter = new ArrayAdapter<String>(AddRestaurant.this,
+					android.R.layout.simple_list_item_1);
+
+			/* Displaying Array elements */
+			for (String k : array) {
+
+				adapter.add(k);
+			}
+
+			address.setAdapter(adapter);
+
+		}
+
 	}
 
 }

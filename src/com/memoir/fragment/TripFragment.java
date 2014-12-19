@@ -1,4 +1,4 @@
-package com.memoir.ui.fragment;
+package com.memoir.fragment;
 
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;

@@ -71,7 +71,8 @@
             android:textColor="@color/add_text_color"
             android:textSize="@dimen/add_heading" />
 
-        <EditText
+        <AutoCompleteTextView
+
             android:id="@+id/rest_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

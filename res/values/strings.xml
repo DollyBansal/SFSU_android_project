@@ -17,6 +17,7 @@
     <string name="trip_name">Trip Name</string>
     <string name="date_time">Date &amp; Time</string>
     <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
     <string name="save">Save</string>
     <string name="save_to_trip">Save &amp; Add to Trip</string>
     <string name="address">Address</string>
@@ -41,5 +42,20 @@
     <string name="did_you_like_it">Did you like it?</string>
     <string name="i_liked_it">I liked it</string>
     <string name="i_didnt_like_it">I didn\'t like it</string>
+    
+    
+    <string-array name="colorList">
+   		<item >Black</item>
+        <item >White</item>
+        <item >Red</item>
+        <item >Blue</item>
+        <item >Yellow</item>
+        <item >Green</item>
+        <item >Brown</item>
+        <item >Pink</item>
+        <item >Orange</item>
+        <item >Purple</item>
+    </string-array>
+    
     
 </resources>

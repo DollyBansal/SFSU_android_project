@@ -1,4 +1,4 @@
-package com.memoir.ui;
+package com.memoir.fragment;
 
 import android.app.ActionBar;
 import android.content.Intent;
@@ -17,11 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.memoir.R;
-import com.memoir.ui.fragment.FlightFragment;
-import com.memoir.ui.fragment.HotelFragment;
-import com.memoir.ui.fragment.PlaceFragment;
-import com.memoir.ui.fragment.RestaurantFragment;
-import com.memoir.ui.fragment.TripFragment;
+import com.memoir.ui.AddNewEntry;
 
 public class MainActivity extends FragmentActivity {
 	public ViewPager mViewPager;

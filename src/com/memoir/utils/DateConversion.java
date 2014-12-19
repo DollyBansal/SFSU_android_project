@@ -9,8 +9,7 @@ import android.net.ParseException;
 public class DateConversion {
 
 	public Date stringToDate(String s_date) {
-		// String dtStart = "2010-10-15T09:27:37Z";
-		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm",
+		SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm",
 				Locale.getDefault());
 		Date date = null;
 		try {
@@ -29,7 +28,7 @@ public class DateConversion {
 	}
 
 	public String dateToString(Date date) {
-		SimpleDateFormat dateformat1 = new SimpleDateFormat("yyyy/MM/dd HH:mm",
+		SimpleDateFormat dateformat1 = new SimpleDateFormat("MM/dd/yyyy HH:mm",
 				Locale.getDefault());
 		String datetime = null;
 		try {

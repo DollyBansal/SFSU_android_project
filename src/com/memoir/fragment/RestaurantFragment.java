@@ -1,4 +1,4 @@
-package com.memoir.ui.fragment;
+package com.memoir.fragment;
 
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -22,7 +22,7 @@ import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
 import com.memoir.model.Memoir.Memoirs;
 import com.memoir.ui.DetailViewActivity;
 
-public abstract class HomeListViewAllFragment extends Fragment implements
+public class RestaurantFragment extends Fragment implements
 		LoaderCallbacks<Cursor> {
 
 	MemoirCursorAdapter cursorAdapter;
@@ -49,8 +49,8 @@ public abstract class HomeListViewAllFragment extends Fragment implements
 		if (id == LOADER_ID) {
 
 			return new CursorLoader(getActivity(), Memoirs.CONTENT_URI,
-					MemoirQuery.PROJECTION, stringSelection(),
-					stringArgument(), getOrderBy());
+					MemoirQuery.PROJECTION, Memoirs.BY_Type,
+					new String[] { "RESTAURENT" }, null);
 		}
 		return null;
 	}
@@ -96,12 +96,6 @@ public abstract class HomeListViewAllFragment extends Fragment implements
 		super.onDestroy();
 	}
 
-	protected abstract String stringSelection();
-
-	protected abstract String[] stringArgument();
-
-	protected abstract String getOrderBy();
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -121,11 +115,11 @@ public abstract class HomeListViewAllFragment extends Fragment implements
 		listView = (ListView) getView().findViewById(R.id.listview_home);
 		listView.setItemsCanFocus(true);
 		cursorAdapter = new MemoirCursorAdapter(getActivity());
-		curs = getActivity().getContentResolver().query(Memoirs.CONTENT_URI,
-				MemoirQuery.PROJECTION, stringSelection(), stringArgument(),
-				getOrderBy());
+		// curs = getActivity().getContentResolver().query(Memoirs.CONTENT_URI,
+		// MemoirQuery.PROJECTION, stringSelection(), stringArgument(),
+		// getOrderBy());
 
-		cursorAdapter = new MemoirCursorAdapter(getActivity(), curs);
+		// cursorAdapter = new MemoirCursorAdapter(getActivity(), curs);
 
 		listView.setAdapter(cursorAdapter);
 

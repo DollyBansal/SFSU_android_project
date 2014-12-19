@@ -1,4 +1,4 @@
-package com.memoir.ui.fragment;
+package com.memoir.fragment;
 
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -22,12 +22,12 @@ import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
 import com.memoir.model.Memoir.Memoirs;
 import com.memoir.ui.DetailViewActivity;
 
-public class RestaurantFragment extends Fragment implements
+public abstract class HomeListViewAllFragment extends Fragment implements
 		LoaderCallbacks<Cursor> {
 
-	MemoirCursorAdapter cursorAdapter;
-	Cursor curs;
-	ListView listView;
+	private MemoirCursorAdapter cursorAdapter;
+	private Cursor curs;
+	private ListView listView;
 
 	private static final int LOADER_ID = 1;
 
@@ -49,8 +49,8 @@ public class RestaurantFragment extends Fragment implements
 		if (id == LOADER_ID) {
 
 			return new CursorLoader(getActivity(), Memoirs.CONTENT_URI,
-					MemoirQuery.PROJECTION, Memoirs.BY_Type,
-					new String[] { "RESTAURENT" }, null);
+					MemoirQuery.PROJECTION, stringSelection(),
+					stringArgument(), getOrderBy());
 		}
 		return null;
 	}
@@ -96,6 +96,12 @@ public class RestaurantFragment extends Fragment implements
 		super.onDestroy();
 	}
 
+	protected abstract String stringSelection();
+
+	protected abstract String[] stringArgument();
+
+	protected abstract String getOrderBy();
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -115,11 +121,11 @@ public class RestaurantFragment extends Fragment implements
 		listView = (ListView) getView().findViewById(R.id.listview_home);
 		listView.setItemsCanFocus(true);
 		cursorAdapter = new MemoirCursorAdapter(getActivity());
-		// curs = getActivity().getContentResolver().query(Memoirs.CONTENT_URI,
-		// MemoirQuery.PROJECTION, stringSelection(), stringArgument(),
-		// getOrderBy());
+		curs = getActivity().getContentResolver().query(Memoirs.CONTENT_URI,
+				MemoirQuery.PROJECTION, stringSelection(), stringArgument(),
+				getOrderBy());
 
-		// cursorAdapter = new MemoirCursorAdapter(getActivity(), curs);
+		cursorAdapter = new MemoirCursorAdapter(getActivity(), curs);
 
 		listView.setAdapter(cursorAdapter);
 

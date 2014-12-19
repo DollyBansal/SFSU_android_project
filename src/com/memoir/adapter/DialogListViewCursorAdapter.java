@@ -11,13 +11,13 @@ import android.widget.TextView;
 import com.memoir.R;
 import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
 
-public class DialigListViewCursorAdapter extends CursorAdapter {
+public class DialogListViewCursorAdapter extends CursorAdapter {
 
-	public DialigListViewCursorAdapter(Context context, Cursor c) {
+	public DialogListViewCursorAdapter(Context context, Cursor c) {
 		super(context, c);
 	}
 
-	public DialigListViewCursorAdapter(Context context) {
+	public DialogListViewCursorAdapter(Context context) {
 		super(context, null, 0);
 	}
 

@@ -31,19 +31,19 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.memoir.R;
-import com.memoir.adapter.DialigListViewCursorAdapter;
+import com.memoir.adapter.DialogListViewCursorAdapter;
 import com.memoir.adapter.MemoirCursorAdapter.MemoirQuery;
 import com.memoir.model.Memoir.Memoirs;
 import com.memoir.provider.DatabaseHelper;
 import com.memoir.utils.DateConversion;
 
 public class AddHotel extends Activity {
-	Button save, saveToTrip, edit_date;
-	EditText name, address, comment;
-	TextView date;
-	String s_name, s_date, s_address, s_comment, s_like;
+	private Button save, saveToTrip;
+	private EditText name, address, comment;
+	private TextView date;
+	private String s_name, s_date, s_address, s_comment, s_like;
 	private Context context = this;
-	DialigListViewCursorAdapter cursorAdapter;
+	private DialogListViewCursorAdapter cursorAdapter;
 	private DateConversion dateConversion;
 
 	@Override
@@ -86,14 +86,37 @@ public class AddHotel extends Activity {
 			}
 		});
 
-		edit_date = (Button) findViewById(R.id.hotel_edit_date_time);
-
 		Calendar c = Calendar.getInstance();
 		String strDateTime = (c.get(Calendar.MONTH) + 1) + "/"
 				+ c.get(Calendar.DAY_OF_MONTH) + "/" + c.get(Calendar.YEAR)
 				+ " " + c.get(Calendar.HOUR_OF_DAY) + ":"
 				+ c.get(Calendar.MINUTE);
 		date.setText(strDateTime);
+
+		Bundle bundle1 = getIntent().getExtras();
+		int datas = 0;
+		if (bundle1 != null) {
+			datas = bundle1.getInt("idd");
+		}
+
+		if (datas != 0) {
+			Cursor curs = this.getContentResolver().query(Memoirs.CONTENT_URI,
+					MemoirQuery.PROJECTION, Memoirs.BY_ID,
+					new String[] { String.valueOf(datas) }, null);
+			curs.moveToFirst();
+
+			String db_name = curs.getString(MemoirQuery.NAME);
+			Date startDate = new Date(curs.getLong(MemoirQuery.STARTDATE));
+			String db_date = dateConversion.dateToString(startDate);
+			String db_address = curs.getString(MemoirQuery.ADDRESS);
+			String db_comment = curs.getString(MemoirQuery.COMMENT);
+
+			name.setText(db_name);
+			date.setText(db_date);
+			address.setText(db_address);
+			comment.setText(db_comment);
+
+		}
 
 		save.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View view) {
@@ -183,7 +206,7 @@ public class AddHotel extends Activity {
 							Memoirs.BY_Type,
 							new String[] { String.valueOf("TRIP") }, null);
 
-					cursorAdapter = new DialigListViewCursorAdapter(
+					cursorAdapter = new DialogListViewCursorAdapter(
 							AddHotel.this, curs);
 					listView.setAdapter(cursorAdapter);
 					listView.setOnItemClickListener(new OnItemClickListener() {

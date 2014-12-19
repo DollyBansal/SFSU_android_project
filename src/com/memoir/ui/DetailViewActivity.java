@@ -1,15 +1,24 @@
 package com.memoir.ui;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.CursorLoader;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.memoir.R;
 import com.memoir.adapter.DetailViewCursorAdapter;
@@ -18,9 +27,9 @@ import com.memoir.model.Memoir.Memoirs;
 
 public class DetailViewActivity extends Activity implements
 		LoaderCallbacks<Cursor> {
-	DetailViewCursorAdapter cursorAdapter;
+	private DetailViewCursorAdapter cursorAdapter;
 	private static final int LOADER_ID = 1;
-	ListView listView;
+	private ListView listView;
 
 	private final ContentObserver Observer = new ContentObserver(new Handler()) {
 		@Override
@@ -68,24 +77,99 @@ public class DetailViewActivity extends Activity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, final Cursor cur) {
 		cursorAdapter.changeCursor(cur);
-		/*
-		 * listView.setOnItemClickListener(new OnItemClickListener() {
-		 * 
-		 * @Override public void onItemClick(AdapterView<?> parent, View view,
-		 * int position, long id) {
-		 * 
-		 * int s_id = cur.getInt(MemoirQuery._ID);
-		 * 
-		 * Intent intent = new Intent(DetailViewActivity.this,
-		 * DetailTripViewActivity.class); Bundle mBundle = new Bundle();
-		 * mBundle.putInt("id", s_id); intent.putExtras(mBundle);
-		 * startActivity(intent); }
-		 * 
-		 * }
-		 * 
-		 * );
-		 */
 
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int pos, long id) {
+
+				final Dialog dialog = new Dialog(context);
+				dialog.setTitle(cur.getString(MemoirQuery.NAME));
+				// dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+				dialog.setContentView(R.layout.edit_dialog_box);
+
+				TextView edit = (TextView) dialog
+						.findViewById(R.id.dialog_edit);
+				TextView delete = (TextView) dialog
+						.findViewById(R.id.dialog_delete);
+
+				edit.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						dialog.dismiss();
+
+						String type = cur.getString(MemoirQuery.TYPE);
+						int s_id = cur.getInt(MemoirQuery._ID);
+
+						Intent intent = null;
+						if (type.equals(getResources().getString(
+								R.string.restaurent))) {
+							intent = new Intent(DetailViewActivity.this,
+									AddRestaurant.class);
+
+						} else if (type.equals(DetailViewActivity.this
+								.getResources().getString(R.string.trip))) {
+							intent = new Intent(DetailViewActivity.this,
+									AddTrip.class);
+
+						} else if (type.equals(DetailViewActivity.this
+								.getResources().getString(R.string.place))) {
+							intent = new Intent(DetailViewActivity.this,
+									AddPlace.class);
+
+						} else if (type.equals(DetailViewActivity.this
+								.getResources().getString(R.string.hotel))) {
+							intent = new Intent(DetailViewActivity.this,
+									AddHotel.class);
+
+						} else if (type.equals(DetailViewActivity.this
+								.getResources().getString(R.string.flight))) {
+							intent = new Intent(DetailViewActivity.this,
+									AddFlight.class);
+
+						}
+
+						Bundle mBundle = new Bundle();
+						mBundle.putInt("idd", s_id);
+						intent.putExtras(mBundle);
+						startActivity(intent);
+
+					}
+				});
+
+				delete.setOnClickListener(new View.OnClickListener() {
+
+					@Override
+					public void onClick(View v) {
+
+						Builder alert = new AlertDialog.Builder(
+								DetailViewActivity.this);
+						alert.setMessage("Are you sure you want to delete");
+
+						alert.setPositiveButton("Ok",
+								new DialogInterface.OnClickListener() {
+									public void onClick(DialogInterface dialog,
+											int which) {
+
+										int s_id = cur.getInt(MemoirQuery._ID);
+										getContentResolver().delete(
+												Memoirs.CONTENT_URI,
+												Memoirs.BY_ID,
+												new String[] { String
+														.valueOf(s_id) });
+
+									}
+								});
+						alert.show();
+						dialog.dismiss();
+					}
+				});
+				dialog.show();
+				return true;
+			}
+		});
 	}
 
 	@Override
@@ -94,10 +178,10 @@ public class DetailViewActivity extends Activity implements
 
 	}
 
-	/*
-	 * @Override public void onBackPressed() { Intent intent = new
-	 * Intent(DetailViewActivity.this, HomeActivity.class);
-	 * startActivity(intent); }
-	 */
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(DetailViewActivity.this, HomeActivity.class);
+		startActivity(intent);
+	}
 
 }

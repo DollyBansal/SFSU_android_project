@@ -19,7 +19,7 @@ import com.memoir.utils.DateConversion;
 public class MemoirCursorAdapter extends CursorAdapter {
 	private TextView name, t_date, like, comment;
 	private String s_name, s_date, s_like, s_comment;
-	DateConversion dateConversion;
+	private DateConversion dateConversion;
 
 	public MemoirCursorAdapter(Context context, Cursor c) {
 		super(context, c);
@@ -57,6 +57,7 @@ public class MemoirCursorAdapter extends CursorAdapter {
 
 	private void populateView(View view, Cursor cursor) {
 		dateConversion = new DateConversion();
+
 		s_name = cursor.getString(MemoirQuery.NAME);
 		name = (TextView) view.findViewById(R.id.list_name);
 		name.setText(s_name);
