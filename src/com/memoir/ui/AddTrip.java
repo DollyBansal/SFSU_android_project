@@ -41,6 +41,7 @@ public class AddTrip extends Activity {
 	private String s_name, s_start_date, s_end_date, s_comment, s_like;
 	private Context context = this;
 	private DateConversion dateConversion;
+	private int delete_id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +102,7 @@ public class AddTrip extends Activity {
 					new String[] { String.valueOf(datas) }, null);
 			curs.moveToFirst();
 
+			delete_id = curs.getInt(MemoirQuery._ID);
 			String db_name = curs.getString(MemoirQuery.NAME);
 			Date startDate = new Date(curs.getLong(MemoirQuery.STARTDATE));
 			String db_s_date = dateConversion.dateToString(startDate);
@@ -138,6 +140,14 @@ public class AddTrip extends Activity {
 					Date endDate = dateConversion.stringToDate(s_end_date);
 					long eDate = endDate.getTime();
 
+					if (delete_id != 0) {
+
+						getContentResolver().delete(Memoirs.CONTENT_URI,
+								Memoirs.BY_ID,
+								new String[] { String.valueOf(delete_id) }
+
+						);
+					}
 					final ContentResolver resolver = getContentResolver();
 					ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 					Builder productBuilder = ContentProviderOperation

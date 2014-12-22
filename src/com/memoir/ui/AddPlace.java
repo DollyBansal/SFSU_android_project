@@ -45,6 +45,7 @@ public class AddPlace extends Activity {
 	private Context context = this;
 	private DialogListViewCursorAdapter cursorAdapter;
 	private DateConversion dateConversion;
+	private int delete_id;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -105,6 +106,7 @@ public class AddPlace extends Activity {
 					new String[] { String.valueOf(datas) }, null);
 			curs.moveToFirst();
 
+			delete_id = curs.getInt(MemoirQuery._ID);
 			String db_name = curs.getString(MemoirQuery.NAME);
 			Date startDate = new Date(curs.getLong(MemoirQuery.STARTDATE));
 			String db_date = dateConversion.dateToString(startDate);
@@ -142,6 +144,15 @@ public class AddPlace extends Activity {
 
 					Date startDate = dateConversion.stringToDate(s_date);
 					long sDate = startDate.getTime();
+
+					if (delete_id != 0) {
+
+						getContentResolver().delete(Memoirs.CONTENT_URI,
+								Memoirs.BY_ID,
+								new String[] { String.valueOf(delete_id) }
+
+						);
+					}
 					final ContentResolver resolver = getContentResolver();
 					ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 					Builder productBuilder = ContentProviderOperation
@@ -228,6 +239,17 @@ public class AddPlace extends Activity {
 							Date startDate = dateConversion
 									.stringToDate(s_date);
 							long sDate = startDate.getTime();
+
+							if (delete_id != 0) {
+
+								getContentResolver().delete(
+										Memoirs.CONTENT_URI,
+										Memoirs.BY_ID,
+										new String[] { String
+												.valueOf(delete_id) }
+
+								);
+							}
 							final ContentResolver resolver = getContentResolver();
 							ArrayList<ContentProviderOperation> operations = new ArrayList<ContentProviderOperation>();
 							Builder productBuilder = ContentProviderOperation
